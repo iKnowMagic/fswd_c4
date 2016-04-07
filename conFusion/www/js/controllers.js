@@ -66,10 +66,10 @@ angular.module('conFusion.controllers', [])
     $timeout(function() {
       $scope.closeReserve();
     }, 1000);
-  };    
+  };
 })
 
-.controller('MenuController', ['$scope', 'menuFactory', 'baseURL', function($scope, menuFactory, baseURL) {
+.controller('MenuController', ['$scope', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicListDelegate', function ($scope, menuFactory, favoriteFactory, baseURL, $ionicListDelegate) {
 
             $scope.baseURL = baseURL;
 
