@@ -211,7 +211,7 @@ angular.module('conFusion.controllers', [])
     */
     $scope.addFavorite = function(index) {
       favoriteFactory.addToFavorites(index);
-      $scope.popover.hide();
+      $scope.popover.hide(); //hide the popover
 
       /*
       This is not required in the assignment,
@@ -226,7 +226,8 @@ angular.module('conFusion.controllers', [])
     Task 3
     */
 
-    // Just like the login and reserve modal code from the AppCtrl controller
+    //similar to the code from the login and reserve modal
+    // code from the AppCtrl controller
     $scope.mycomment = {};
 
     $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
@@ -238,10 +239,12 @@ angular.module('conFusion.controllers', [])
       $scope.commentform.show();
     };
     $scope.closeComment = function() {
-      $scope.commentform.hide();
-      $scope.popover.hide();
+      $scope.commentform.hide(); //hide the comment modal
+      $scope.popover.hide(); //hide the popover
     };
     $scope.doComment = function() {
+      //code similar to the code found in the
+      // DishCommentController controller
       $scope.mycomment.date = new Date().toISOString();
       console.log('Adding a comment', $scope.mycomment);
 
@@ -252,7 +255,8 @@ angular.module('conFusion.controllers', [])
       .$promise.then(
         function(response) {
           $scope.closeComment();
-          $scope.popover.hide();
+
+          //not required but nice nonetheless
           $ionicPopup.alert({
             title: 'Comment Added',
             template: 'Thank you for adding a comment on the '+ $scope.dish.name + ' dish. :)'
