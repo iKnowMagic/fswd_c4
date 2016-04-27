@@ -169,7 +169,12 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', function($scope, $stateParams, menuFactory, baseURL) {
+.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory',
+                        'baseURL', '$ionicPopover', 'favoriteFactory',
+                        '$ionicPopup', '$ionicModal', '$timeout',
+            function($scope, $stateParams, menuFactory,
+                         baseURL, $ionicPopover, favoriteFactory,
+                         $ionicPopup, $ionicModal, $timeout) {
   $scope.baseURL = baseURL;
   $scope.dish = {};
   $scope.showDish = false;
@@ -188,6 +193,76 @@ angular.module('conFusion.controllers', [])
       }
     );
 
+    /*
+    Task 1
+    */
+    $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+      scope: $scope
+    }).then(function(popover) {
+      $scope.popover = popover;
+    });
+
+    $scope.dishDetailPopover = function($event) {
+      $scope.popover.show($event);
+    };
+
+    /*
+    Task 2
+    */
+    $scope.addFavorite = function(index) {
+      favoriteFactory.addToFavorites(index);
+      $scope.popover.hide();
+
+      /*
+      This is not required in the assignment,
+      however it is a nice addition.
+      */
+      $ionicPopup.alert({
+        title: 'Dish Added To Favorites'
+      });
+    };
+
+    /*
+    Task 3
+    */
+
+    // Just like the login and reserve modal code from the AppCtrl controller
+    $scope.mycomment = {};
+
+    $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.commentform = modal;
+    });
+    $scope.comment = function() {
+      $scope.commentform.show();
+    };
+    $scope.closeComment = function() {
+      $scope.commentform.hide();
+      $scope.popover.hide();
+    };
+    $scope.doComment = function() {
+      $scope.mycomment.date = new Date().toISOString();
+      console.log('Adding a comment', $scope.mycomment);
+
+      $scope.dish.comments.push($scope.mycomment);
+      menuFactory.getDishes().update({
+        id: $scope.dish.id
+      }, $scope.dish)
+      .$promise.then(
+        function(response) {
+          $scope.closeComment();
+          $scope.popover.hide();
+          $ionicPopup.alert({
+            title: 'Comment Added',
+            template: 'Thank you for adding a comment on the '+ $scope.dish.name + ' dish. :)'
+          });
+        },
+        function(response) {
+          $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+      );
+    };
 
 }])
 
