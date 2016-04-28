@@ -256,6 +256,14 @@ angular.module('conFusion.controllers', [])
         function(response) {
           $scope.closeComment();
 
+          //clean up the form fields
+          $scope.mycomment = {
+            rating: "",
+            comment: "",
+            author: "",
+            date: ""
+          };
+
           //not required but nice nonetheless
           $ionicPopup.alert({
             title: 'Comment Added',
